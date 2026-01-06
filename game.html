@@ -7,49 +7,114 @@
   <style>
     body{margin:0;font-family:system-ui;background:#0b1220;color:#eaf0ff}
     main{max-width:900px;margin:auto;padding:20px}
+    a{color:#8ea0c7}
     h1{margin-top:0}
     .box{background:#101a30;border:1px solid #1f2a44;border-radius:14px;padding:16px;margin-bottom:16px}
+    .cover{width:100%;max-height:340px;object-fit:cover;border-radius:12px;border:1px solid #1f2a44;display:block}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .meta{color:#8ea0c7;font-size:14px;line-height:1.6}
     a.btn{display:block;margin-top:10px;padding:12px;border-radius:10px;
-      text-align:center;text-decoration:none;font-weight:700}
+      text-align:center;text-decoration:none;font-weight:800}
     .free{background:#2f6bff;color:#fff}
     .premium{background:#22c55e;color:#08130b}
+    .video{aspect-ratio:16/9;width:100%;border-radius:12px;overflow:hidden;border:1px solid #1f2a44;background:#0b1220}
+    iframe{width:100%;height:100%;border:0}
+    @media (max-width: 800px){ .row{grid-template-columns:1fr} }
   </style>
 </head>
 <body>
 
-<main id="content"></main>
+<main id="content">
+  <div class="box">Cargando juego…</div>
+</main>
 
 <script>
-const slug = new URLSearchParams(window.location.search).get("slug");
+(async function(){
+  const slug = new URLSearchParams(window.location.search).get("slug");
+  const mount = document.getElementById("content");
 
-fetch("data/games.json")
-  .then(r => r.json())
-  .then(data => {
-    const g = data.games.find(x => x.slug === slug);
-    if(!g){ document.body.innerHTML="Juego no encontrado"; return; }
+  if (!slug) {
+    mount.innerHTML = `<div class="box">Falta el parámetro <b>slug</b>. Vuelve a <a href="index.html">Inicio</a>.</div>`;
+    return;
+  }
 
-    document.title = g.title + " – ElAmigos Hub";
+  try {
+    const res = await fetch("data/games.json?v=" + Date.now(), { cache: "no-store" });
+    if (!res.ok) throw new Error("No se pudo cargar data/games.json (HTTP " + res.status + ")");
 
-    document.getElementById("content").innerHTML = `
-      <h1>${g.title}</h1>
+    const data = await res.json();
+    const games = Array.isArray(data.games) ? data.games : [];
+    const g = games.find(x => String(x.slug) === String(slug));
+
+    if (!g) {
+      mount.innerHTML = `<div class="box">Juego no encontrado: <b>${escapeHtml(slug)}</b>. Vuelve a <a href="index.html">Inicio</a>.</div>`;
+      return;
+    }
+
+    document.title = (g.title || "Juego") + " – ElAmigos Hub";
+
+    const coverBlock = g.cover
+      ? `<div class="box"><img class="cover" src="${g.cover}" alt="${escapeHtml(g.title || "Portada")}"></div>`
+      : "";
+
+    const videoBlock = g.youtube_id
+      ? `<div class="box">
+           <h3 style="margin:0 0 10px">Gameplay / Review</h3>
+           <div class="video">
+             <iframe src="https://www.youtube.com/embed/${encodeURIComponent(g.youtube_id)}"
+                     title="Gameplay" loading="lazy"
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                     allowfullscreen></iframe>
+           </div>
+         </div>`
+      : "";
+
+    const premiumBtn = g.download_premium
+      ? `<a class="btn premium" href="${g.download_premium}" target="_blank" rel="nofollow noopener">
+           ⚡ Descarga rápida (Premium)
+         </a>` : "";
+
+    mount.innerHTML = `
       <div class="box">
-        <p><b>Categoría:</b> ${g.category}</p>
-        <p><b>Tamaño:</b> ${g.size}</p>
-        <p><b>Idiomas:</b> ${g.languages}</p>
-        <p>${g.description || ""}</p>
+        <a href="index.html">← Volver</a>
       </div>
 
+      ${coverBlock}
+
       <div class="box">
-        <a class="btn free" href="${g.download_free}" target="_blank">
+        <h1>${escapeHtml(g.title || "Sin título")}</h1>
+        <div class="meta">
+          <div><b>Categoría:</b> ${escapeHtml(g.category || "Other")}</div>
+          <div><b>Tamaño:</b> ${escapeHtml(g.size || "")}</div>
+          <div><b>Idiomas:</b> ${escapeHtml(g.languages || "")}</div>
+        </div>
+        ${g.description ? `<p class="meta" style="margin-top:10px">${escapeHtml(g.description)}</p>` : ""}
+      </div>
+
+      ${videoBlock}
+
+      <div class="box">
+        <h3 style="margin:0 0 10px">Descargas</h3>
+        <a class="btn free" href="${g.download_free}" target="_blank" rel="nofollow noopener">
           ⬇️ Descarga gratuita
         </a>
-        ${g.download_premium ? `
-        <a class="btn premium" href="${g.download_premium}" target="_blank">
-          ⚡ Descarga rápida (Premium)
-        </a>` : ``}
+        ${premiumBtn}
       </div>
     `;
-  });
+
+  } catch (err) {
+    mount.innerHTML = `<div class="box">Error: ${escapeHtml(err.message)}. Revisa rutas y deploy.</div>`;
+    console.error(err);
+  }
+
+  function escapeHtml(str){
+    return String(str ?? "").replace(/[&<>"']/g, m => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
+    }[m]));
+  }
+})();
 </script>
 </body>
+</html>
+
 </html>
