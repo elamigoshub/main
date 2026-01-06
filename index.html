@@ -28,3 +28,18 @@
 </main>
 
 <script>
+<!-- Netlify Identity (necesario para aceptar invite_token y crear password) -->
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("init", user => {
+      // Si vienes del email (invite/recovery), muestra el modal automáticamente
+      window.netlifyIdentity.open();
+    });
+
+    window.netlifyIdentity.on("login", () => {
+      // Cuando termines el login, te manda al admin
+      document.location.href = "/admin/";
+    });
+  }
+</script>
