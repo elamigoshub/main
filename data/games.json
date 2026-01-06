@@ -1,17 +1,26 @@
 {
   "games": [
     {
-      "slug": "juego-ejemplo",
-      "title": "Juego Ejemplo",
-      "cover": "",
-      "category": "Action",
-      "size": "12 GB",
-      "languages": "ES / EN",
-      "download_free": "https://example.com/free",
       "download_premium": "https://example.com/premium",
+      "size": "12 GB",
+      "download_free": "https://example.com/free",
+      "slug": "juego-ejemplo",
+      "youtube_id": "",
+      "cover": "",
+      "title": "Juego Ejemplo",
+      "languages": "ES / EN",
       "description": "Descripción corta del juego.",
-      "youtube_id": ""
+      "category": "Action"
+    },
+    {
+      "slug": "Pro Cycling Manager 2025",
+      "title": "Pro Cycling Manager 2025",
+      "category": "Carreras",
+      "size": "27GB",
+      "languages": "ES",
+      "download_free": "ENLACE WEB",
+      "description": "Download Pro Cycling Manager 25 for PC is now easier on this page, where you have the official version of Elamigos and available servers like Mega, Googledrive, MediaFire and Torrent, download it now and get the game updated to the latest version.\nPro Cycling Manager 25 enters in a new era! With a switch to Unreal Engine 5, the game now benefits from a much more realistic representation of cycling and even higher graphics quality, for an even more immersive experience. Rediscover the roads of the Tour de France, the Vuelta, the Classics and the Monuments in a whole new light.",
+      "download_premium": "https://www.youtube.com/watch?v=IIeEGBWj4Vg"
     }
   ]
 }
-
