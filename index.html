@@ -9,12 +9,14 @@
     header{padding:20px;text-align:center;border-bottom:1px solid #1f2a44}
     h1{margin:0}
     main{max-width:1100px;margin:auto;padding:20px}
+    .notice{padding:12px 14px;border:1px solid #1f2a44;border-radius:12px;background:#101a30;color:#8ea0c7;margin-bottom:16px}
     .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
     .card{background:#101a30;border:1px solid #1f2a44;border-radius:14px;padding:14px}
+    .cover{width:100%;height:140px;object-fit:cover;border-radius:10px;border:1px solid #1f2a44;margin-bottom:10px;display:block}
     .card h3{margin:0 0 6px}
     .meta{font-size:13px;color:#8ea0c7}
     a.btn{display:block;margin-top:10px;padding:10px;border-radius:10px;
-      background:#2f6bff;color:#fff;text-align:center;text-decoration:none}
+      background:#2f6bff;color:#fff;text-align:center;text-decoration:none;font-weight:700}
   </style>
 </head>
 <body>
@@ -24,22 +26,60 @@
 </header>
 
 <main>
+  <div id="status" class="notice">Cargando juegos…</div>
   <div id="games" class="grid"></div>
 </main>
 
 <script>
-<!-- Netlify Identity (necesario para aceptar invite_token y crear password) -->
-<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-<script>
-  if (window.netlifyIdentity) {
-    window.netlifyIdentity.on("init", user => {
-      // Si vienes del email (invite/recovery), muestra el modal automáticamente
-      window.netlifyIdentity.open();
+(async function(){
+  const status = document.getElementById("status");
+  const grid = document.getElementById("games");
+
+  try {
+    // Evita caché agresiva cuando actualizas covers/JSON
+    const res = await fetch("data/games.json?v=" + Date.now(), { cache: "no-store" });
+    if (!res.ok) throw new Error("No se pudo cargar data/games.json (HTTP " + res.status + ")");
+
+    const data = await res.json();
+    const games = Array.isArray(data.games) ? data.games : [];
+
+    if (!games.length) {
+      status.textContent = "No hay juegos todavía. Entra a /admin y añade uno (Games → Add).";
+      return;
+    }
+
+    status.textContent = "Mostrando " + games.length + " juegos.";
+    grid.innerHTML = "";
+
+    games.forEach(g => {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const coverHtml = g.cover
+        ? `<img class="cover" src="${g.cover}" alt="${escapeHtml(g.title || "Portada")}">`
+        : "";
+
+      card.innerHTML = `
+        ${coverHtml}
+        <h3>${escapeHtml(g.title || "Sin título")}</h3>
+        <div class="meta">${escapeHtml(g.category || "Other")} • ${escapeHtml(g.size || "")}</div>
+        <a class="btn" href="game.html?slug=${encodeURIComponent(g.slug || "")}">Ver ficha</a>
+      `;
+
+      grid.appendChild(card);
     });
 
-    window.netlifyIdentity.on("login", () => {
-      // Cuando termines el login, te manda al admin
-      document.location.href = "/admin/";
-    });
+  } catch (err) {
+    status.textContent = "Error: " + err.message + " — revisa que exista main/data/games.json y que Netlify publique desde 'main'.";
+    console.error(err);
   }
+
+  function escapeHtml(str){
+    return String(str ?? "").replace(/[&<>"']/g, m => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
+    }[m]));
+  }
+})();
 </script>
+</body>
+</html>
