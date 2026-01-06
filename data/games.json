@@ -1,0 +1,14 @@
+{
+  "games": [
+    {
+      "slug": "juego-ejemplo",
+      "title": "Juego Ejemplo",
+      "category": "Action",
+      "size": "12 GB",
+      "languages": "ES / EN",
+      "download_free": "https://example.com/free",
+      "download_premium": "https://example.com/premium",
+      "description": "Descripción del juego."
+    }
+  ]
+}
