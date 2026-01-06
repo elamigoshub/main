@@ -1,28 +1,40 @@
 <!doctype html>
-<html>
+<html lang="es">
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Admin</title>
 </head>
 <body>
-
-  <!-- Netlify Identity -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
   <script>
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on("init", user => {
-        if (!user) {
-          window.netlifyIdentity.on("login", () => {
-            document.location.href = "/admin/";
-          });
-        }
+    window.addEventListener("load", function () {
+      if (!window.netlifyIdentity) {
+        document.body.innerHTML = "No se cargó Netlify Identity. Revisa si Identity está enabled en Netlify.";
+        return;
+      }
+
+      // Inicializa explícitamente
+      window.netlifyIdentity.init();
+
+      // Si vienes con invite_token o recovery_token, abre el modal sí o sí
+      const h = window.location.hash || "";
+      if (h.includes("invite_token=") || h.includes("recovery_token=")) {
+        window.netlifyIdentity.open("signup");
+      } else {
+        // Abre login normal
+        window.netlifyIdentity.open("login");
+      }
+
+      // Al loguear, te quedas en /admin
+      window.netlifyIdentity.on("login", function () {
+        document.location.href = "/admin/";
       });
-    }
+    });
   </script>
 
-  <!-- Decap CMS -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-
 </body>
 </html>
+
