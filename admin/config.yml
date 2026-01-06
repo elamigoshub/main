@@ -2,6 +2,15 @@ backend:
   name: git-gateway
   branch: main
 
+# Requeridos por el schema del CMS
+media_folder: "main/assets/uploads"
+public_folder: "/assets/uploads"
+
+media_library:
+  name: uploadcare
+  config:
+    publicKey: "demopublickey"
+
 collections:
   - name: games
     label: Games
@@ -13,6 +22,7 @@ collections:
           - name: games
             label: Games
             widget: list
+            summary: "{{fields.title}} ({{fields.size}})"
             fields:
               - { label: "Slug", name: "slug", widget: "string" }
               - { label: "Título", name: "title", widget: "string" }
