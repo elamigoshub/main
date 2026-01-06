@@ -1,0 +1,24 @@
+backend:
+  name: git-gateway
+  branch: main
+
+collections:
+  - name: games
+    label: Games
+    files:
+      - file: "main/data/games.json"
+        name: games
+        label: Games list
+        fields:
+          - name: games
+            label: Games
+            widget: list
+            fields:
+              - { label: "Slug", name: "slug", widget: "string" }
+              - { label: "Título", name: "title", widget: "string" }
+              - { label: "Categoría", name: "category", widget: "string" }
+              - { label: "Tamaño", name: "size", widget: "string" }
+              - { label: "Idiomas", name: "languages", widget: "string" }
+              - { label: "Descarga gratis", name: "download_free", widget: "string" }
+              - { label: "Descarga premium", name: "download_premium", widget: "string", required: false }
+              - { label: "Descripción", name: "description", widget: "text", required: false }
