@@ -32,3 +32,5 @@ collections:
               - { label: "Descarga gratis", name: "download_free", widget: "string" }
               - { label: "Descarga premium", name: "download_premium", widget: "string", required: false }
               - { label: "Descripción", name: "description", widget: "text", required: false }
+              - { label: "Portada", name: "cover", widget: "image", required: false }
+
