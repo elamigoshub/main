@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>ElAmigos Hub</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body{margin:0;font-family:system-ui;background:#0b1220;color:#eaf0ff}
+    header{padding:20px;text-align:center;border-bottom:1px solid #1f2a44}
+    h1{margin:0}
+    main{max-width:1100px;margin:auto;padding:20px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+    .card{background:#101a30;border:1px solid #1f2a44;border-radius:14px;padding:14px}
+    .card h3{margin:0 0 6px}
+    .meta{font-size:13px;color:#8ea0c7}
+    a.btn{display:block;margin-top:10px;padding:10px;border-radius:10px;
+      background:#2f6bff;color:#fff;text-align:center;text-decoration:none}
+  </style>
+</head>
+<body>
+<header>
+  <h1>ElAmigos Hub</h1>
+  <p>Juegos • fichas • descargas</p>
+</header>
+
+<main>
+  <div id="games" class="grid"></div>
+</main>
+
+<script>
