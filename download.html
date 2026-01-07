@@ -3,46 +3,95 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Preparando descarga…</title>
-  <meta name="robots" content="noindex,nofollow" />
+  <title>Descarga — ElAmigosHUB</title>
 
   <style>
-    body{margin:0;font-family:system-ui,Segoe UI,Roboto,Arial;background:#0f172a;color:#e5e7eb}
-    .wrap{max-width:920px;margin:0 auto;padding:18px}
-    .card{background:#111827;border:1px solid #1f2937;border-radius:14px;padding:18px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
-    .ad{display:flex;justify-content:center;align-items:center;margin-bottom:14px;min-height:110px}
-    .ad.big{min-height:260px}
-    h1{margin:0 0 6px;font-size:22px}
-    .muted{color:#9ca3af;font-size:14px;margin:0 0 14px}
-    .pill{display:inline-flex;gap:8px;align-items:center;padding:8px 10px;border-radius:999px;border:1px solid #334155;background:#0b1220;color:#cbd5e1;font-size:13px;margin:0 8px 10px 0}
-    .row{display:flex;gap:16px;flex-wrap:wrap}
-    .col{flex:1 1 320px}
-    .progress{width:100%;height:10px;background:#0b1220;border:1px solid #334155;border-radius:999px;overflow:hidden;margin:12px 0}
-    .bar{height:100%;width:0%;background:#22c55e}
-    .btn{display:inline-flex;align-items:center;justify-content:center;padding:14px 16px;border-radius:12px;text-decoration:none;font-weight:800;border:1px solid transparent;min-width:240px;cursor:pointer}
-    .btn.primary{background:#22c55e;color:#0b1220}
-    .btn.primary[aria-disabled="true"]{background:#334155;color:#cbd5e1;cursor:not-allowed}
-    .btn.secondary{background:#0b1220;color:#e5e7eb;border-color:#334155;margin-left:8px}
-    .err{margin-top:10px;color:#fecaca;background:#7f1d1d33;border:1px solid #7f1d1d;padding:10px;border-radius:10px;display:none;white-space:pre-wrap}
-    footer{font-size:12px;color:#94a3b8;margin-top:12px}
+    :root{
+      --bg:#0b1220; --card:#101a30; --muted:#8ea0c7; --text:#eaf0ff;
+      --line:rgba(255,255,255,.10); --btn:#2f6bff; --max:900px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;background:var(--bg);color:var(--text);}
+    header{border-bottom:1px solid var(--line);padding:16px;}
+    main{max-width:var(--max);margin:auto;padding:18px 16px 42px;}
+    .card{border:1px solid var(--line);background:rgba(16,26,48,.75);border-radius:16px;overflow:hidden;}
+    .cover{width:100%;height:220px;object-fit:cover;display:block;}
+    .b{padding:14px;}
+    .muted{color:var(--muted);line-height:1.6}
+    .row{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;}
+    .btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--btn);font-weight:800;}
+    .btn.alt{background:transparent;}
+    .notice{margin-top:12px;color:var(--muted);font-size:13px}
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
 
-      <!-- ADSTERRA TOP -->
-      <div class="ad">
-        <!-- Pega aquí tu Adsterra TOP (728x90 o responsive) -->
+<header>
+  <strong><a href="/index.html" style="color:inherit;text-decoration:none">ElAmigosHUB</a></strong>
+</header>
+
+<main>
+  <div id="box" class="card"></div>
+</main>
+
+<!-- Adsterra (para monetizar esta intermedia) -->
+<script src="https://pl28424505.effectivegatecpm.com/3a/ae/93/3aae93d0b1b617ac83e45f1eb9745735.js"></script>
+<script src="https://pl28425159.effectivegatecpm.com/57/5c/a5/575ca5ca6fa90ae43377ac49a45da19f.js"></script>
+
+<script>
+  const SMARTLINK = "https://www.effectivegatecpm.com/vrz4ii26?key=a8db24c7cfd144939d6c3b694e6f4a98";
+  const slug = new URLSearchParams(location.search).get("slug") || "";
+
+  function esc(s){
+    return (s||"").toString()
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  async function loadGames(){
+    const r = await fetch("/data/games.json", { cache:"no-store" });
+    const data = await r.json();
+    return Array.isArray(data) ? data : (data.games || []);
+  }
+
+  window.addEventListener("DOMContentLoaded", async () => {
+    const games = await loadGames();
+    const g = games.find(x => (x.slug||"") === slug);
+
+    const box = document.getElementById("box");
+    if(!g){
+      box.innerHTML = `<div class="b"><p class="muted">Juego no encontrado.</p><div class="row"><a class="btn alt" href="/index.html">Volver</a></div></div>`;
+      return;
+    }
+
+    const title = esc(g.title||"");
+    const cover = esc(g.cover||"");
+    const desc = esc(g.description||"");
+    const free = g.download_free || "#";
+    const premium = (g.download_premium && g.download_premium !== "#") ? g.download_premium : SMARTLINK;
+
+    box.innerHTML = `
+      <img class="cover" src="${cover}" alt="${title}">
+      <div class="b">
+        <h2 style="margin:0 0 8px;">${title}</h2>
+        <p class="muted" style="margin:0;">${desc}</p>
+
+        <div class="notice">
+          Estás en la página intermedia de descarga. Pulsa continuar para ir al servidor.
+        </div>
+
+        <div class="row">
+          <a class="btn" href="${free}" target="_blank" rel="nofollow noopener">Continuar a 1fichier</a>
+          <a class="btn alt" href="${premium}" target="_blank" rel="nofollow noopener">Premium</a>
+          <a class="btn alt" href="/index.html">Volver</a>
+        </div>
       </div>
+    `;
+  });
+</script>
 
-      <h1>Preparando descarga…</h1>
-      <p class="muted">
-        <span class="pill">🎮 <span id="gameName">Cargando…</span></span>
-        <span class="pill">⬇️ <span id="modeLabel">Gratis</span></span><br/>
-        Tu enlace se activará en <strong><span id="secs">8</span>s</strong>.
-      </p>
-
-      <div class="row">
-        <div class="col">
-          <div class="progress"><div class="bar" id="bar"></div></div>
+</body>
+</html>
