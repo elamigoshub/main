@@ -4,337 +4,176 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>ElAmigos Hub — Juegos, fichas y descargas</title>
-  <meta name="description" content="Portal de juegos: fichas claras, portadas y enlaces de descarga. Rápido, simple y organizado." />
+
+  <meta name="description" content="Portal de juegos: fichas claras, portadas oficiales y enlaces de descarga optimizados." />
+
   <style>
     :root{
-      --bg:#0b1220; --card:#101a30; --muted:#8ea0c7; --text:#eaf0ff;
-      --line:rgba(255,255,255,.10); --btn:#2f6bff; --btn2:#22c55e;
-      --max:1120px; --r:16px;
+      --bg:#0b1220;
+      --card:#101a30;
+      --muted:#8ea0c7;
+      --text:#eaf0ff;
+      --line:rgba(255,255,255,.10);
+      --btn:#2f6bff;
+      --btn2:#22c55e;
+      --max:1120px;
+      --r:16px;
     }
+
     *{box-sizing:border-box}
+
     body{
-      margin:0; font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;
-      background:radial-gradient(900px 600px at 20% 10%, #182b5a 0%, transparent 55%),
-                 radial-gradient(900px 600px at 80% 0%, #0f3b2c 0%, transparent 55%),
-                 var(--bg);
+      margin:0;
+      font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;
+      background:
+        radial-gradient(900px 600px at 20% 0%, #14204a 0%, transparent 60%),
+        radial-gradient(800px 500px at 80% 20%, #0b3a5a 0%, transparent 55%),
+        var(--bg);
       color:var(--text);
     }
-    a{color:inherit; text-decoration:none}
-    .wrap{max-width:var(--max); margin:0 auto; padding:22px 18px 56px}
+
+    a{color:inherit;text-decoration:none}
 
     header{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:14px; padding:10px 0 18px; flex-wrap:wrap;
+      border-bottom:1px solid var(--line);
+      background:rgba(11,18,32,.85);
+      backdrop-filter: blur(6px);
+      position:sticky;
+      top:0;
+      z-index:10;
     }
-    .brand{display:flex; gap:12px; align-items:center}
-    .logo{
-      width:40px; height:40px; border-radius:12px;
-      background:linear-gradient(135deg, #2f6bff 0%, #22c55e 100%);
-      box-shadow:0 10px 30px rgba(47,107,255,.25);
+
+    .wrap{
+      max-width:var(--max);
+      margin:auto;
+      padding:18px 16px;
     }
-    .brand h1{font-size:16px; margin:0; letter-spacing:.2px}
-    .brand p{margin:0; font-size:12px; color:var(--muted)}
-    nav{display:flex; gap:10px; flex-wrap:wrap}
-    .navlink{
-      padding:10px 12px; border:1px solid var(--line); border-radius:999px;
-      font-size:13px; color:var(--muted);
-      background:rgba(255,255,255,.03);
-    }
-    .navlink:hover{color:var(--text); border-color:rgba(255,255,255,.22)}
 
     .hero{
-      margin-top:10px;
-      border:1px solid var(--line); border-radius:24px;
-      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-      padding:28px;
-      display:grid; grid-template-columns: 1.2fr .8fr; gap:18px;
-    }
-    .hero h2{margin:0 0 10px; font-size:34px; line-height:1.05}
-    .hero p{margin:0 0 16px; color:var(--muted); font-size:15px; max-width:60ch}
-    .cta{display:flex; gap:10px; flex-wrap:wrap}
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center; gap:10px;
-      padding:12px 14px; border-radius:12px; font-weight:700; font-size:14px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.04);
-    }
-    .btn.primary{background:var(--btn); border-color:rgba(47,107,255,.35)}
-    .btn.primary:hover{filter:brightness(1.05)}
-    .btn.green{background:var(--btn2); border-color:rgba(34,197,94,.35); color:#08130b}
-    .btn:hover{transform:translateY(-1px)}
-
-    .panel{
-      border:1px solid var(--line); border-radius:18px;
-      padding:14px; background:rgba(0,0,0,.18);
-      display:flex; flex-direction:column; gap:10px; height:100%;
-    }
-    .search{
-      display:flex; gap:10px; align-items:center;
-      border:1px solid var(--line); border-radius:14px; padding:10px 12px;
-      background:rgba(255,255,255,.03);
-    }
-    .search input{
-      width:100%; border:0; outline:0; background:transparent; color:var(--text);
-      font-size:14px;
-    }
-    .badge{
-      display:inline-flex; gap:8px; align-items:center;
-      padding:8px 10px; border-radius:999px; font-size:12px;
-      border:1px solid var(--line); color:var(--muted);
-      background:rgba(255,255,255,.03);
+      padding:60px 16px 42px;
+      text-align:center;
     }
 
-    .section{
-      margin-top:20px;
-      border:1px solid var(--line); border-radius:18px;
-      padding:16px; background:rgba(255,255,255,.02);
-    }
-    .section h3{margin:0 0 12px; font-size:16px}
-    .cats{display:flex; flex-wrap:wrap; gap:10px}
-    .cats button{
-      cursor:pointer;
-      padding:10px 12px; border-radius:999px; border:1px solid var(--line);
-      background:rgba(255,255,255,.03); color:var(--muted); font-size:13px;
-    }
-    .cats button:hover{color:var(--text); border-color:rgba(255,255,255,.22)}
-    .cats button.active{
-      background:rgba(47,107,255,.22);
-      border-color:rgba(47,107,255,.45);
-      color:var(--text);
+    .hero h1{
+      font-size:clamp(28px,5vw,44px);
+      margin:0 0 12px;
     }
 
-    .notice{
-      margin-top:14px;
-      padding:12px 14px;
-      border:1px solid var(--line);
-      border-radius:14px;
-      background:rgba(255,255,255,.03);
+    .hero p{
       color:var(--muted);
-      font-size:13px;
+      max-width:720px;
+      margin:0 auto 22px;
+      line-height:1.6;
     }
 
-    .grid{
-      margin-top:14px;
-      display:grid; grid-template-columns: repeat(12, 1fr);
-      gap:14px;
+    .banner{
+      margin:22px auto 10px;
+      max-width:728px;
     }
-    .card{
-      grid-column: span 4;
-      border:1px solid var(--line); border-radius:var(--r);
-      background:rgba(255,255,255,.03);
-      overflow:hidden;
-      transition: transform .12s ease, border-color .12s ease;
+
+    .banner img{
+      width:100%;
+      height:auto;
+      border-radius:12px;
+      display:block;
     }
-    .card:hover{transform:translateY(-2px); border-color:rgba(255,255,255,.22)}
-    .thumb{
-      height:150px;
-      background:linear-gradient(135deg, rgba(47,107,255,.35), rgba(34,197,94,.22));
-      position:relative;
+
+    .btns{
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top:22px;
     }
-    .thumb img{
-      width:100%; height:100%; object-fit:cover; display:block;
+
+    .btn{
+      padding:12px 18px;
+      border-radius:12px;
+      font-weight:700;
+      border:1px solid var(--line);
+      background:var(--btn);
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
     }
-    .pill{
-      position:absolute; left:10px; bottom:10px;
-      font-size:12px; padding:6px 10px; border-radius:999px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(0,0,0,.22);
-      color:var(--text);
-      backdrop-filter: blur(6px);
+
+    .btn.alt{
+      background:transparent;
     }
-    .content{padding:12px}
-    .title{margin:0 0 6px; font-size:15px}
-    .meta{margin:0 0 10px; color:var(--muted); font-size:12px}
-    .actions{display:flex; gap:10px}
-    .actions a{flex:1; text-align:center; padding:10px 10px; border-radius:12px; font-size:13px}
-    .actions .view{border:1px solid var(--line); background:rgba(255,255,255,.03); color:var(--text)}
-    .actions .dl{background:rgba(47,107,255,.18); border:1px solid rgba(47,107,255,.35)}
-    .actions a:hover{filter:brightness(1.05)}
 
     footer{
-      margin-top:26px; color:var(--muted); font-size:12px;
-      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
-      padding-top:16px; border-top:1px solid var(--line);
-    }
-
-    @media (max-width: 900px){
-      .hero{grid-template-columns:1fr}
-      .card{grid-column: span 6}
-    }
-    @media (max-width: 560px){
-      .card{grid-column: span 12}
-      .hero h2{font-size:28px}
+      border-top:1px solid var(--line);
+      color:var(--muted);
+      text-align:center;
+      padding:26px 16px;
+      font-size:14px;
     }
   </style>
 </head>
+
 <body>
+
+<header>
   <div class="wrap">
-    <header>
-      <div class="brand">
-        <div class="logo" aria-hidden="true"></div>
-        <div>
-          <h1>ElAmigos Hub</h1>
-          <p>Fichas claras • portadas • descargas</p>
-        </div>
-      </div>
-      <nav>
-        <a class="navlink" href="#games">Juegos</a>
-        <a class="navlink" href="#categories">Categorías</a>
-        <a class="navlink" href="/admin/">Admin</a>
-      </nav>
-    </header>
-
-    <main>
-      <section class="hero">
-        <div>
-          <h2>Juegos originales, fichas rápidas y descargas organizadas</h2>
-          <p>
-            Busca por nombre, filtra por categoría y entra a cada ficha con portada, info y botones de descarga.
-            Todo ligero y listo para escalar.
-          </p>
-          <div class="cta">
-            <a class="btn primary" href="#games">Explorar juegos →</a>
-            <a class="btn" href="#categories">Ver categorías</a>
-            <a class="btn green" href="#" title="Cuando quieras lo conectamos">Premium</a>
-          </div>
-        </div>
-
-        <aside class="panel">
-          <div class="search">
-            <span aria-hidden="true">🔎</span>
-            <input id="search" type="search" placeholder="Buscar juego…" />
-          </div>
-          <span class="badge">⚡ Portadas desde tu PC (admin)</span>
-          <span class="badge">🧾 Datos centralizados en games.json</span>
-          <span class="badge">🎯 Filtro por categorías automático</span>
-        </aside>
-      </section>
-
-      <section id="categories" class="section">
-        <h3>📚 Categorías</h3>
-        <div class="cats" id="cats"></div>
-        <div class="notice" id="status">Cargando juegos…</div>
-      </section>
-
-      <section id="games" class="section">
-        <h3>🎮 Juegos</h3>
-        <div class="grid" id="grid"></div>
-      </section>
-    </main>
-
-    <footer>
-      <div>© <span id="year"></span> ElAmigos Hub</div>
-      <div>2026 - Más libertad para el mundo</div>
-    </footer>
+    <strong>ElAmigosHUB</strong>
   </div>
+</header>
 
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
+<main>
+  <section class="hero">
+    <h1>Juegos, fichas y descargas</h1>
+    <p>
+      Descubre juegos organizados con fichas claras, portadas oficiales
+      y enlaces de descarga optimizados.
+    </p>
 
-    const statusEl = document.getElementById("status");
-    const gridEl = document.getElementById("grid");
-    const catsEl = document.getElementById("cats");
-    const searchEl = document.getElementById("search");
+    <!-- ========================= -->
+    <!-- BANNER 728x90 (CLICK -> SMARTLINK) -->
+    <!-- ========================= -->
+    <div class="banner">
+      <a
+        href="https://www.effectivegatecpm.com/vrz4ii26?key=a8db24c7cfd144939d6c3b694e6f4a98"
+        rel="nofollow noopener"
+        target="_blank"
+      >
+        <img
+          alt="Publicidad"
+          src="https://landings-cdn.adsterratech.com/referralBanners/png/728%20x%2090%20px.png"
+        />
+      </a>
+    </div>
 
-    let ALL = [];
-    let activeCategory = "All";
+    <div class="btns">
+      <a href="/juegos.html" class="btn">Ver juegos</a>
 
-    function esc(s){
-      return String(s ?? "").replace(/[&<>"']/g, m => ({
-        "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
-      }[m]));
-    }
+      <!-- ========================= -->
+      <!-- BOTÓN PREMIUM -> SMARTLINK -->
+      <!-- ========================= -->
+      <a
+        href="https://www.effectivegatecpm.com/vrz4ii26?key=a8db24c7cfd144939d6c3b694e6f4a98"
+        class="btn alt"
+        rel="nofollow noopener"
+        target="_blank"
+      >
+        Descarga premium
+      </a>
+    </div>
+  </section>
+</main>
 
-    function normalizeCat(c){
-      const v = (c || "Other").trim();
-      return v ? v : "Other";
-    }
+<footer>
+  © 2026 ElAmigosHUB — Todos los derechos reservados
+</footer>
 
-    function renderCategories(games){
-      const set = new Set(games.map(g => normalizeCat(g.category)));
-      const cats = ["All", ...Array.from(set).sort((a,b)=>a.localeCompare(b))];
+<!-- ========================= -->
+<!-- Adsterra POPUNDER -->
+<!-- ========================= -->
+<script src="https://pl28424505.effectivegatecpm.com/3a/ae/93/3aae93d0b1b617ac83e45f1eb9745735.js"></script>
 
-      catsEl.innerHTML = "";
-      cats.forEach(c => {
-        const b = document.createElement("button");
-        b.textContent = c;
-        b.className = (c === activeCategory) ? "active" : "";
-        b.onclick = () => {
-          activeCategory = c;
-          Array.from(catsEl.children).forEach(x => x.classList.remove("active"));
-          b.classList.add("active");
-          renderGrid();
-        };
-        catsEl.appendChild(b);
-      });
-    }
+<!-- ========================= -->
+<!-- Adsterra SOCIAL BAR -->
+<!-- ========================= -->
+<script src="https://pl28425159.effectivegatecpm.com/57/5c/a5/575ca5ca6fa90ae43377ac49a45da19f.js"></script>
 
-    function matchesFilters(g){
-      const q = (searchEl.value || "").trim().toLowerCase();
-      const title = (g.title || "").toLowerCase();
-      const catOk = (activeCategory === "All") ? true : (normalizeCat(g.category) === activeCategory);
-      const qOk = q ? title.includes(q) : true;
-      return catOk && qOk;
-    }
-
-    function renderGrid(){
-      const filtered = ALL.filter(matchesFilters);
-
-      statusEl.textContent = filtered.length
-        ? `Mostrando ${filtered.length} juegos${activeCategory !== "All" ? " en " + activeCategory : ""}.`
-        : `No hay resultados${activeCategory !== "All" ? " en " + activeCategory : ""}.`;
-
-      gridEl.innerHTML = "";
-      filtered.forEach(g => {
-        const cover = g.cover
-          ? `<img src="${g.cover}" alt="${esc(g.title)}">`
-          : "";
-
-        const pill = `${esc(normalizeCat(g.category))}${g.size ? " • " + esc(g.size) : ""}`;
-
-        const card = document.createElement("article");
-        card.className = "card";
-        card.innerHTML = `
-          <div class="thumb">
-            ${cover}
-            <span class="pill">${pill}</span>
-          </div>
-          <div class="content">
-            <h4 class="title">${esc(g.title || "Sin título")}</h4>
-            <p class="meta">${esc(g.languages || "")}</p>
-            <div class="actions">
-              <a class="view" href="game.html?slug=${encodeURIComponent(g.slug || "")}">Ver ficha</a>
-              <a class="dl" href="download.html?slug=${encodeURIComponent(g.slug || "")}&mode=free" rel="nofollow">Descargar</a>
-            </div>
-          </div>
-        `;
-        gridEl.appendChild(card);
-      });
-    }
-
-    async function init(){
-      try{
-        const res = await fetch("data/games.json?v=" + Date.now(), { cache: "no-store" });
-        if(!res.ok) throw new Error("HTTP " + res.status);
-        const data = await res.json();
-
-        ALL = Array.isArray(data.games) ? data.games : [];
-        if(!ALL.length){
-          statusEl.textContent = "No hay juegos todavía. Entra a /admin y añade uno.";
-          renderCategories([]);
-          return;
-        }
-
-        renderCategories(ALL);
-        renderGrid();
-      }catch(e){
-        statusEl.textContent = "Error cargando juegos. Revisa data/games.json y el deploy. (" + e.message + ")";
-        console.error(e);
-      }
-    }
-
-    searchEl.addEventListener("input", renderGrid);
-    init();
-  </script>
 </body>
 </html>
