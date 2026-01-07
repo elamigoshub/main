@@ -11,7 +11,12 @@
       --line:rgba(255,255,255,.10); --btn:#2f6bff; --max:900px;
     }
     *{box-sizing:border-box}
-    body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;background:var(--bg);color:var(--text);}
+    body{
+      margin:0;
+      font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;
+      background:var(--bg);
+      color:var(--text);
+    }
     header{border-bottom:1px solid var(--line);padding:16px;}
     main{max-width:var(--max);margin:auto;padding:18px 16px 42px;}
     .card{border:1px solid var(--line);background:rgba(16,26,48,.75);border-radius:16px;overflow:hidden;}
@@ -21,12 +26,18 @@
     .row{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;}
 
     .btn{
-      display:inline-flex;align-items:center;justify-content:center;
-      padding:12px 14px;border-radius:12px;border:1px solid var(--line);
-      background:var(--btn);font-weight:800; text-decoration:none;
-      min-width: 220px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:var(--btn);
+      font-weight:800;
+      text-decoration:none;
+      min-width:220px;
     }
-    .btn.alt{background:transparent; min-width:auto;}
+    .btn.alt{background:transparent;min-width:auto;}
     .btn.disabled{
       background:rgba(255,255,255,.06);
       color:var(--muted);
@@ -45,8 +56,8 @@
       color:var(--muted);
       font-size:13px;
       display:flex;
-      align-items:center;
       justify-content:space-between;
+      align-items:center;
       gap:12px;
       flex-wrap:wrap;
     }
@@ -63,14 +74,16 @@
   <div id="box" class="card"></div>
 </main>
 
-<!-- Adsterra (monetiza esta intermedia) -->
+<!-- ========================= -->
+<!-- Adsterra: Popunder + Social Bar -->
+<!-- ========================= -->
 <script src="https://pl28424505.effectivegatecpm.com/3a/ae/93/3aae93d0b1b617ac83e45f1eb9745735.js"></script>
 <script src="https://pl28425159.effectivegatecpm.com/57/5c/a5/575ca5ca6fa90ae43377ac49a45da19f.js"></script>
 
 <script>
   const SMARTLINK = "https://www.effectivegatecpm.com/vrz4ii26?key=a8db24c7cfd144939d6c3b694e6f4a98";
-  const slug = new URLSearchParams(location.search).get("slug") || "";
   const DELAY_SECONDS = 5;
+  const slug = new URLSearchParams(location.search).get("slug") || "";
 
   function esc(s){
     return (s||"").toString()
@@ -93,25 +106,22 @@
     return Array.isArray(data) ? data : (data.games || []);
   }
 
-  function startCountdown(btnEl, counterEl, targetUrl){
+  function startCountdown(btn, counter, targetUrl){
     let t = DELAY_SECONDS;
-    btnEl.classList.add("disabled");
-    btnEl.setAttribute("aria-disabled", "true");
-    btnEl.removeAttribute("href");
-
-    counterEl.innerHTML = `Esperando… <strong>${t}s</strong>`;
+    btn.classList.add("disabled");
+    btn.removeAttribute("href");
+    counter.innerHTML = `Esperando… <strong>${t}s</strong>`;
 
     const timer = setInterval(() => {
-      t -= 1;
-      if (t <= 0) {
+      t--;
+      if (t <= 0){
         clearInterval(timer);
-        counterEl.innerHTML = `Listo ✅ <strong>puedes continuar</strong>`;
-        btnEl.classList.remove("disabled");
-        btnEl.removeAttribute("aria-disabled");
-        btnEl.setAttribute("href", targetUrl);
-        btnEl.textContent = "Continuar a 1fichier";
+        counter.innerHTML = `Listo ✅ <strong>puedes continuar</strong>`;
+        btn.classList.remove("disabled");
+        btn.setAttribute("href", targetUrl);
+        btn.textContent = "Continuar a 1fichier";
       } else {
-        counterEl.innerHTML = `Esperando… <strong>${t}s</strong>`;
+        counter.innerHTML = `Esperando… <strong>${t}s</strong>`;
       }
     }, 1000);
   }
@@ -131,24 +141,33 @@
         return;
       }
 
-      const title = esc(g.title||"");
-      const cover = esc(g.cover||"");
-      const desc = esc(g.description||"");
-
       const free = (g.download_free || "").trim();
-      const premium = (g.download_premium && g.download_premium !== "#") ? g.download_premium : SMARTLINK;
-
+      const premium = isRealLink(g.download_premium) ? g.download_premium : SMARTLINK;
       const freeAvailable = isRealLink(free);
 
       box.innerHTML = `
-        <img class="cover" src="${cover}" alt="${title}">
+        <img class="cover" src="${esc(g.cover)}" alt="${esc(g.title)}">
         <div class="b">
-          <h2 style="margin:0 0 8px;">${title}</h2>
-          <p class="muted" style="margin:0;">${desc}</p>
+          <h2 style="margin:0 0 8px;">${esc(g.title)}</h2>
+          <p class="muted" style="margin:0;">${esc(g.description||"")}</p>
 
           <div class="notice">
-            Estás en la página intermedia de descarga.
-            ${freeAvailable ? "Espera unos segundos y se activará el botón." : "Este juego aún no tiene enlace de descarga normal."}
+            ${freeAvailable
+              ? "Espera unos segundos y se activará el enlace de descarga."
+              : "Este juego aún no tiene enlace de descarga normal."
+            }
+          </div>
+
+          <!-- Banner GIF visible -->
+          <div style="max-width:720px;margin:14px auto 0;">
+            <a href="${SMARTLINK}" target="_blank" rel="nofollow noopener">
+              <img
+                src="https://landings-cdn.adsterratech.com/referralBanners/gif/720x90_adsterra_reff.gif"
+                alt="Publicidad"
+                style="width:100%;height:auto;border-radius:12px;display:block;border:1px solid rgba(255,255,255,.10)"
+                loading="lazy"
+              />
+            </a>
           </div>
 
           ${freeAvailable ? `
@@ -170,19 +189,20 @@
         </div>
       `;
 
-      // Inicia contador solo si hay link real
       if (freeAvailable){
-        const freeBtn = document.getElementById("freeBtn");
-        const counter = document.getElementById("counter");
-        startCountdown(freeBtn, counter, free);
+        startCountdown(
+          document.getElementById("freeBtn"),
+          document.getElementById("counter"),
+          free
+        );
       }
 
     }catch(e){
-      console.error(e);
       box.innerHTML = `<div class="b">
-        <p class="muted"><strong style="color:#eaf0ff">Error cargando datos.</strong><br>${esc(e.message)}</p>
+        <p class="muted"><strong>Error:</strong> ${esc(e.message)}</p>
         <div class="row"><a class="btn alt" href="./index.html">Volver</a></div>
       </div>`;
+      console.error(e);
     }
   });
 </script>
