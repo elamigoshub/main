@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Preparando descarga…</title>
+  <meta name="robots" content="noindex,nofollow" />
+
+  <!-- ===================== -->
+  <!-- ADSTERRA GLOBAL (si usas alguno global, va aquí) -->
+  <!-- ===================== -->
+  <!--
+  <script type="text/javascript" src="//plXXXXXXX.highcpmrevenuegate.com/XX/XX/XXXX.js"></script>
+  -->
+
+  <style>
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:#0f172a;
+      color:#e5e7eb;
+    }
+    .wrap{ max-width:920px; margin:0 auto; padding:18px; }
+    .card{
+      background:#111827;
+      border:1px solid #1f2937;
+      border-radius:14px;
+      padding:18px;
+    }
+    h1{ margin:0 0 6px; font-size:22px; }
+    .muted{ color:#9ca3af; font-size:14px; margin-bottom:14px; }
+    .row{ display:flex; gap:16px; flex-wrap:wrap; }
+    .col{ flex:1 1 320px; }
+    .ad{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      margin-bottom:14px;
+      min-height:110px;
+    }
+    .ad.big{ min-height:260px; }
+    .btn{
+      display:inline-block;
+      padding:14px 18px;
+      border-radius:10px;
+      font-weight:800;
+      text-decoration:none;
+      margin-top:12px;
+    }
+    .btn.primary{
+      background:#22c55e;
+      color:#0b1220;
+    }
+    .btn.primary[aria-disabled="true"]{
+      background:#334155;
+      color:#cbd5e1;
+      cursor:not-allowed;
+    }
+    .btn.secondary{
+      background:#0b1220;
+      color:#e5e7eb;
+      border:1px solid #334155;
+      margin-left:8px;
+    }
+    .progress{
+      width:100%;
+      height:10px;
+      background:#0b1220;
+      border:1px solid #334155;
+      border-radius:999px;
+      overflow:hidden;
+      margin:12px 0;
+    }
+    .bar{ height:100%; width:0%; background:#22c55e; }
+    footer{ font-size:12px; color:#94a3b8; margin-top:12px; }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="card">
+
+      <!-- ===================== -->
+      <!-- ADSTERRA TOP BANNER -->
+      <!-- ===================== -->
+      <div class="ad">
+        <!-- PEGA AQUÍ el código Adsterra 728x90 o responsive -->
+        <!--
+        <script type="text/javascript">
+          atOptions = {
+            'key' : 'XXXXXXXXXXXX',
+            'format' : 'iframe',
+            'height' : 90,
+            'width' : 728,
+            'params' : {}
+          };
+        </script>
+        <script type="text/javascript" src="//www.highcpmrevenuegate.com/XXXXXXXX/invoke.js"></script>
+        -->
+      </div>
+
+      <h1>Preparando descarga…</h1>
+      <p class="muted">
+        Tu enlace se activará en <strong><span id="secs">8</span> segundos</strong>.
+      </p>
+
+      <div class="row">
+        <div class="col">
+
+          <div class="progress">
+            <div class="bar" id="bar"></div>
+          </div>
+
+          <a id="goBtn" class="btn primary" href="#" aria-disabled="true" rel="nofollow noopener">
+            ⏳ Espera…
+          </a>
+
+          <a id="directBtn" class="btn secondary" href="#" rel="nofollow noopener">
+            Abrir enlace directo
+          </a>
+
+          <footer>
+            ⚡ Consejo: la descarga premium es inmediata y sin límites.  
+            ❤️ Apoya la web usando Premium.
+          </footer>
+
+        </div>
+
+        <!-- ===================== -->
+        <!-- ADSTERRA MID BANNER -->
+        <!-- ===================== -->
+        <div class="col">
+          <div class="ad big">
+            <!-- PEGA AQUÍ el código Adsterra 300x250 / 336x280 -->
+            <!--
+            <script type="text/javascript">
+              atOptions = {
+                'key' : 'YYYYYYYYYYYY',
+                'format' : 'iframe',
+                'height' : 250,
+                'width' : 300,
+                'params' : {}
+              };
+            </script>
+            <script type="text/javascript" src="//www.highcpmrevenuegate.com/YYYYYYYY/invoke.js"></script>
+            -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const FINAL_URL = "https://1fichier.com/?XXXXXXX"; // 🔴 TU LINK REAL
+    const secondsTotal = 8;
+
+    const secsEl = document.getElementById("secs");
+    const barEl = document.getElementById("bar");
+    const goBtn = document.getElementById("goBtn");
+    const directBtn = document.getElementById("directBtn");
+
+    goBtn.href = FINAL_URL;
+    directBtn.href = FINAL_URL;
+
+    let left = secondsTotal;
+    let elapsed = 0;
+    const tick = 100;
+
+    const timer = setInterval(() => {
+      elapsed += tick;
+      const progress = elapsed / (secondsTotal * 1000);
+      barEl.style.width = Math.min(progress * 100, 100) + "%";
+
+      const newLeft = Math.max(0, Math.ceil(secondsTotal - elapsed / 1000));
+      secsEl.textContent = newLeft;
+
+      if (progress >= 1) {
+        clearInterval(timer);
+        goBtn.setAttribute("aria-disabled", "false");
+        goBtn.textContent = "✅ Continuar a la descarga";
+      }
+    }, tick);
+
+    goBtn.addEventListener("click", e => {
+      if (goBtn.getAttribute("aria-disabled") === "true") {
+        e.preventDefault();
+      }
+    });
+  </script>
+
+</body>
+</html>
