@@ -45,7 +45,31 @@
       pointer-events:none;
     }
 
+    /* Premium más llamativo */
+    .btn.premium{
+      background: linear-gradient(135deg, rgba(47,107,255,.95), rgba(34,197,94,.85));
+      border-color: rgba(255,255,255,.18);
+      color: var(--text);
+      box-shadow: 0 10px 24px rgba(0,0,0,.28);
+    }
+    .btn.premium:hover{
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+
     .notice{margin-top:12px;color:var(--muted);font-size:13px}
+
+    .ad-wrap{
+      max-width:720px;
+      margin:14px auto 0;
+    }
+    .ad-wrap img{
+      width:100%;
+      height:auto;
+      border-radius:12px;
+      display:block;
+      border:1px solid rgba(255,255,255,.10);
+    }
 
     .countdown{
       margin-top:12px;
@@ -62,6 +86,21 @@
       flex-wrap:wrap;
     }
     .countdown strong{color:var(--text)}
+
+    .progress{
+      margin-top:10px;
+      height:10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.10);
+      overflow:hidden;
+    }
+    .bar{
+      height:100%;
+      width:0%;
+      background:rgba(47,107,255,.55);
+      transition: width .25s linear;
+    }
   </style>
 </head>
 <body>
@@ -82,7 +121,7 @@
 
 <script>
   const SMARTLINK = "https://www.effectivegatecpm.com/vrz4ii26?key=a8db24c7cfd144939d6c3b694e6f4a98";
-  const DELAY_SECONDS = 5;
+  const DELAY_SECONDS = 30;
   const slug = new URLSearchParams(location.search).get("slug") || "";
 
   function esc(s){
@@ -106,22 +145,32 @@
     return Array.isArray(data) ? data : (data.games || []);
   }
 
-  function startCountdown(btn, counter, targetUrl){
+  function startCountdown(btn, counter, barEl, targetUrl){
     let t = DELAY_SECONDS;
+
     btn.classList.add("disabled");
     btn.removeAttribute("href");
-    counter.innerHTML = `Esperando… <strong>${t}s</strong>`;
+    btn.textContent = "Activando enlace…";
+
+    const updateUI = () => {
+      counter.innerHTML = `Espera… <strong>${t}s</strong>`;
+      const done = ((DELAY_SECONDS - t) / DELAY_SECONDS) * 100;
+      barEl.style.width = Math.min(100, Math.max(0, done)) + "%";
+    };
+
+    updateUI();
 
     const timer = setInterval(() => {
       t--;
       if (t <= 0){
         clearInterval(timer);
         counter.innerHTML = `Listo ✅ <strong>puedes continuar</strong>`;
+        barEl.style.width = "100%";
         btn.classList.remove("disabled");
         btn.setAttribute("href", targetUrl);
         btn.textContent = "Continuar a 1fichier";
       } else {
-        counter.innerHTML = `Esperando… <strong>${t}s</strong>`;
+        updateUI();
       }
     }, 1000);
   }
@@ -158,15 +207,10 @@
             }
           </div>
 
-          <!-- Banner GIF visible -->
-          <div style="max-width:720px;margin:14px auto 0;">
+          <!-- Banner visible #1 -->
+          <div class="ad-wrap">
             <a href="${SMARTLINK}" target="_blank" rel="nofollow noopener">
-              <img
-                src="https://landings-cdn.adsterratech.com/referralBanners/gif/720x90_adsterra_reff.gif"
-                alt="Publicidad"
-                style="width:100%;height:auto;border-radius:12px;display:block;border:1px solid rgba(255,255,255,.10)"
-                loading="lazy"
-              />
+              <img src="https://landings-cdn.adsterratech.com/referralBanners/gif/720x90_adsterra_reff.gif" alt="Publicidad" loading="lazy" />
             </a>
           </div>
 
@@ -175,7 +219,17 @@
               <span>Activando el enlace…</span>
               <span id="counter"><strong>${DELAY_SECONDS}s</strong></span>
             </div>
+            <div class="progress" aria-hidden="true">
+              <div class="bar" id="bar"></div>
+            </div>
           ` : ""}
+
+          <!-- Banner visible #2 (cerca de botones) -->
+          <div class="ad-wrap">
+            <a href="${SMARTLINK}" target="_blank" rel="nofollow noopener">
+              <img src="https://landings-cdn.adsterratech.com/referralBanners/gif/720x90_adsterra_reff.gif" alt="Publicidad" loading="lazy" />
+            </a>
+          </div>
 
           <div class="row">
             ${
@@ -183,8 +237,20 @@
                 ? `<a id="freeBtn" class="btn" href="${free}" target="_blank" rel="nofollow noopener">Continuar a 1fichier</a>`
                 : `<span class="btn disabled">Descarga normal no disponible</span>`
             }
-            <a class="btn alt" href="${premium}" target="_blank" rel="nofollow noopener">Premium</a>
+
+            <!-- Premium más llamativo -->
+            <a class="btn premium" href="${premium}" target="_blank" rel="nofollow noopener">
+              ⚡ Premium (más rápido)
+            </a>
+
             <a class="btn alt" href="./index.html">Volver</a>
+          </div>
+
+          <!-- Banner visible #3 (al final) -->
+          <div class="ad-wrap" style="margin-top:16px;">
+            <a href="${SMARTLINK}" target="_blank" rel="nofollow noopener">
+              <img src="https://landings-cdn.adsterratech.com/referralBanners/gif/720x90_adsterra_reff.gif" alt="Publicidad" loading="lazy" />
+            </a>
           </div>
         </div>
       `;
@@ -193,6 +259,7 @@
         startCountdown(
           document.getElementById("freeBtn"),
           document.getElementById("counter"),
+          document.getElementById("bar"),
           free
         );
       }
