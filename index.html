@@ -304,7 +304,7 @@
             <p class="meta">${esc(g.languages || "")}</p>
             <div class="actions">
               <a class="view" href="game.html?slug=${encodeURIComponent(g.slug || "")}">Ver ficha</a>
-              <a class="dl" href="${esc(g.download_free || "#")}" target="_blank" rel="nofollow noopener">Descargar</a>
+              <a class="dl" href="download.html?slug=${encodeURIComponent(g.slug || "")}&mode=free" rel="nofollow">Descargar</a>
             </div>
           </div>
         `;
