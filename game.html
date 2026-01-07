@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <title>Juego</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
+
   <style>
     body{margin:0;font-family:system-ui;background:#0b1220;color:#eaf0ff}
     main{max-width:900px;margin:auto;padding:20px}
@@ -28,17 +29,30 @@
   <div class="box">Cargando juego…</div>
 </main>
 
+<!-- Adsterra (monetiza también la ficha) -->
+<script src="https://pl28424505.effectivegatecpm.com/3a/ae/93/3aae93d0b1b617ac83e45f1eb9745735.js"></script>
+<script src="https://pl28425159.effectivegatecpm.com/57/5c/a5/575ca5ca6fa90ae43377ac49a45da19f.js"></script>
+
 <script>
 (async function(){
+  const SMARTLINK = "https://www.effectivegatecpm.com/vrz4ii26?key=a8db24c7cfd144939d6c3b694e6f4a98";
+
   const slug = new URLSearchParams(window.location.search).get("slug");
   const mount = document.getElementById("content");
 
   if (!slug) {
-    mount.innerHTML = `<div class="box">Falta el parámetro <b>slug</b>. Vuelve a <a href="index.html">Inicio</a>.</div>`;
+    mount.innerHTML = `<div class="box">Falta el parámetro <b>slug</b>. Vuelve a <a href="./index.html">Inicio</a>.</div>`;
     return;
   }
 
+  function isRealLink(url){
+    if(!url) return false;
+    const u = String(url).trim();
+    return u !== "" && u !== "#";
+  }
+
   try {
+    // ✅ RELATIVO (igual que los otros)
     const res = await fetch("data/games.json?v=" + Date.now(), { cache: "no-store" });
     if (!res.ok) throw new Error("No se pudo cargar data/games.json (HTTP " + res.status + ")");
 
@@ -47,7 +61,7 @@
     const g = games.find(x => String(x.slug) === String(slug));
 
     if (!g) {
-      mount.innerHTML = `<div class="box">Juego no encontrado: <b>${escapeHtml(slug)}</b>. Vuelve a <a href="index.html">Inicio</a>.</div>`;
+      mount.innerHTML = `<div class="box">Juego no encontrado: <b>${escapeHtml(slug)}</b>. Vuelve a <a href="./index.html">Inicio</a>.</div>`;
       return;
     }
 
@@ -69,14 +83,15 @@
          </div>`
       : "";
 
-    const premiumBtn = g.download_premium
-      ? `<a class="btn premium" href="${g.download_premium}" target="_blank" rel="nofollow noopener">
-           ⚡ Descarga rápida (Premium)
-         </a>` : "";
+    // ✅ Gratis SIEMPRE pasa por la intermedia
+    const freeHref = `./download.html?slug=${encodeURIComponent(g.slug)}`;
+
+    // ✅ Premium: si hay link real úsalo, si no Smartlink
+    const premiumHref = isRealLink(g.download_premium) ? g.download_premium : SMARTLINK;
 
     mount.innerHTML = `
       <div class="box">
-        <a href="index.html">← Volver</a>
+        <a href="./index.html">← Volver</a>
       </div>
 
       ${coverBlock}
@@ -95,10 +110,14 @@
 
       <div class="box">
         <h3 style="margin:0 0 10px">Descargas</h3>
-        <a class="btn free" href="${g.download_free}" target="_blank" rel="nofollow noopener">
-          ⬇️ Descarga gratuita
+
+        <a class="btn free" href="${freeHref}" rel="nofollow">
+          ⬇️ Descarga normal (gratis)
         </a>
-        ${premiumBtn}
+
+        <a class="btn premium" href="${premiumHref}" target="_blank" rel="nofollow noopener">
+          ⚡ Descarga rápida (Premium)
+        </a>
       </div>
     `;
 
@@ -115,6 +134,4 @@
 })();
 </script>
 </body>
-</html>
-
 </html>
