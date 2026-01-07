@@ -82,6 +82,14 @@
     }
     .btn.alt{background:transparent;}
 
+    .errorbox{
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.06);
+      border-radius:14px;
+      padding:14px;
+      color:var(--muted);
+    }
+
     footer{
       border-top:1px solid var(--line);
       color:var(--muted);
@@ -95,11 +103,11 @@
 <body>
 <header>
   <div class="wrap top">
-    <div class="brand"><a href="/index.html">ElAmigosHUB</a></div>
+    <div class="brand"><a href="./index.html">ElAmigosHUB</a></div>
     <nav class="nav">
-      <a class="pill" href="/index.html">Inicio</a>
-      <a class="pill" href="/games.html">Juegos</a>
-      <a class="pill" href="/premium.html" rel="nofollow noopener" target="_blank">Premium</a>
+      <a class="pill" href="./index.html">Inicio</a>
+      <a class="pill" href="./games.html">Juegos</a>
+      <a class="pill" href="./premium.html" rel="nofollow noopener" target="_blank">Premium</a>
     </nav>
   </div>
 </header>
@@ -108,7 +116,6 @@
   <h1>Juegos, fichas y descargas</h1>
   <p>Fichas claras, portadas y enlaces. Descarga normal con pasos y premium para acceso rápido.</p>
 
-  <!-- Banner 728x90 (click -> smartlink) -->
   <div class="banner">
     <a
       href="https://www.effectivegatecpm.com/vrz4ii26?key=a8db24c7cfd144939d6c3b694e6f4a98"
@@ -125,18 +132,16 @@
     <input id="q" class="input" placeholder="Buscar juegos…" />
   </div>
 
-  <!-- AQUÍ se renderizan los juegos -->
   <section id="grid" class="grid"></section>
+  <div id="err" style="margin-top:14px;"></div>
 </main>
 
 <footer>© 2026 ElAmigosHUB</footer>
 
-<!-- Adsterra: Popunder + Social Bar -->
 <script src="https://pl28424505.effectivegatecpm.com/3a/ae/93/3aae93d0b1b617ac83e45f1eb9745735.js"></script>
 <script src="https://pl28425159.effectivegatecpm.com/57/5c/a5/575ca5ca6fa90ae43377ac49a45da19f.js"></script>
 
 <script>
-  // Render de juegos desde /data/games.json (estructura de ayer)
   const SMARTLINK = "https://www.effectivegatecpm.com/vrz4ii26?key=a8db24c7cfd144939d6c3b694e6f4a98";
 
   function esc(s){
@@ -150,11 +155,10 @@
   function norm(s){ return (s||"").toString().toLowerCase().trim(); }
 
   async function loadGames(){
-    const r = await fetch("/data/games.json", { cache: "no-store" });
-    if(!r.ok) throw new Error("No se pudo cargar /data/games.json");
+    // ✅ RELATIVA (no rompe si estás en subcarpeta)
+    const r = await fetch("data/games.json", { cache: "no-store" });
+    if(!r.ok) throw new Error("No se pudo cargar data/games.json (HTTP " + r.status + ")");
     const data = await r.json();
-
-    // Soporta que venga como array directo o como {games:[...]}
     return Array.isArray(data) ? data : (data.games || []);
   }
 
@@ -167,13 +171,8 @@
     const slug = encodeURIComponent(g.slug || "");
     const desc = esc(g.description || "");
 
-    // Descarga normal: pasa por download.html y de ahí a 1fichier (o lo que pongas en download_free)
-    const freeHref = g.download_free ? `/download.html?slug=${slug}` : "#";
-
-    // Premium: si tienes enlace premium propio, úsalo; si no, smartlink
-    const premiumHref = g.download_premium && g.download_premium !== "#"
-      ? g.download_premium
-      : SMARTLINK;
+    const freeHref = g.download_free ? `./download.html?slug=${slug}` : `./download.html?slug=${slug}`;
+    const premiumHref = (g.download_premium && g.download_premium !== "#") ? g.download_premium : SMARTLINK;
 
     return `
       <article class="card">
@@ -208,10 +207,20 @@
   }
 
   window.addEventListener("DOMContentLoaded", async () => {
-    const games = await loadGames();
-    const q = document.getElementById("q");
-    q.addEventListener("input", () => render(games));
-    render(games);
+    const err = document.getElementById("err");
+    try{
+      const games = await loadGames();
+      const q = document.getElementById("q");
+      q.addEventListener("input", () => render(games));
+      render(games);
+    }catch(e){
+      console.error(e);
+      err.innerHTML = `<div class="errorbox">
+        <strong style="color:var(--text)">No se han podido cargar los juegos.</strong><br>
+        <span>${esc(e.message)}</span><br><br>
+        <span>Comprueba que existe <code>data/games.json</code> y que estás abriendo la web desde un servidor (no desde <code>file://</code>).</span>
+      </div>`;
+    }
   });
 </script>
 
