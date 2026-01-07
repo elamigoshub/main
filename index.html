@@ -4,102 +4,83 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>ElAmigos Hub — Juegos, fichas y descargas</title>
-
-  <meta name="description" content="Portal de juegos: fichas claras, portadas oficiales y enlaces de descarga optimizados." />
+  <meta name="description" content="Portal de juegos: fichas claras, portadas y enlaces de descarga." />
 
   <style>
     :root{
-      --bg:#0b1220;
-      --card:#101a30;
-      --muted:#8ea0c7;
-      --text:#eaf0ff;
-      --line:rgba(255,255,255,.10);
-      --btn:#2f6bff;
-      --btn2:#22c55e;
-      --max:1120px;
-      --r:16px;
+      --bg:#0b1220; --card:#101a30; --muted:#8ea0c7; --text:#eaf0ff;
+      --line:rgba(255,255,255,.10); --btn:#2f6bff; --btn2:#22c55e;
+      --max:1120px; --r:16px;
     }
-
     *{box-sizing:border-box}
-
     body{
-      margin:0;
-      font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;
+      margin:0; font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;
       background:
         radial-gradient(900px 600px at 20% 0%, #14204a 0%, transparent 60%),
         radial-gradient(800px 500px at 80% 20%, #0b3a5a 0%, transparent 55%),
         var(--bg);
       color:var(--text);
     }
-
     a{color:inherit;text-decoration:none}
-
     header{
       border-bottom:1px solid var(--line);
       background:rgba(11,18,32,.85);
       backdrop-filter: blur(6px);
-      position:sticky;
-      top:0;
-      z-index:10;
+      position:sticky; top:0; z-index:10;
     }
-
-    .wrap{
-      max-width:var(--max);
-      margin:auto;
-      padding:18px 16px;
-    }
-
-    .hero{
-      padding:60px 16px 42px;
-      text-align:center;
-    }
-
-    .hero h1{
-      font-size:clamp(28px,5vw,44px);
-      margin:0 0 12px;
-    }
-
-    .hero p{
-      color:var(--muted);
-      max-width:720px;
-      margin:0 auto 22px;
-      line-height:1.6;
-    }
-
-    .banner{
-      margin:22px auto 10px;
-      max-width:728px;
-    }
-
-    .banner img{
-      width:100%;
-      height:auto;
-      border-radius:12px;
-      display:block;
-    }
-
-    .btns{
-      display:flex;
-      gap:12px;
-      justify-content:center;
-      flex-wrap:wrap;
-      margin-top:22px;
-    }
-
-    .btn{
-      padding:12px 18px;
-      border-radius:12px;
-      font-weight:700;
+    .wrap{max-width:var(--max); margin:auto; padding:18px 16px;}
+    .top{display:flex; justify-content:space-between; align-items:center; gap:12px;}
+    .brand{font-weight:800}
+    .nav{display:flex; gap:10px; flex-wrap:wrap}
+    .pill{
       border:1px solid var(--line);
-      background:var(--btn);
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
+      padding:10px 12px;
+      border-radius:999px;
+      color:var(--muted);
     }
 
-    .btn.alt{
-      background:transparent;
+    .hero{padding:44px 16px 18px; text-align:center;}
+    .hero h1{font-size:clamp(28px,5vw,44px); margin:0 0 10px;}
+    .hero p{color:var(--muted); max-width:760px; margin:0 auto 18px; line-height:1.6;}
+
+    .banner{max-width:728px; margin:16px auto 0;}
+    .banner img{width:100%; height:auto; border-radius:12px; display:block;}
+
+    main{max-width:var(--max); margin:auto; padding:18px 16px 42px;}
+    .controls{display:flex; gap:12px; flex-wrap:wrap; margin:10px 0 16px;}
+    .input{
+      flex:1; min-width:220px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:12px 12px;
+      border-radius:12px;
+      outline:none;
     }
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap:14px;
+    }
+    .card{
+      border:1px solid var(--line);
+      background:rgba(16,26,48,.75);
+      border-radius:16px;
+      overflow:hidden;
+      transition: transform .08s ease;
+    }
+    .card:hover{transform: translateY(-2px);}
+    .cover{width:100%; height:140px; object-fit:cover; display:block;}
+    .cardb{padding:12px;}
+    .title{font-weight:800; margin:0 0 6px;}
+    .meta{color:var(--muted); font-size:13px; display:flex; gap:8px; flex-wrap:wrap;}
+    .btnrow{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      padding:10px 12px; border-radius:12px; border:1px solid var(--line);
+      background:var(--btn); font-weight:800;
+    }
+    .btn.alt{background:transparent;}
 
     footer{
       border-top:1px solid var(--line);
@@ -112,68 +93,127 @@
 </head>
 
 <body>
-
 <header>
-  <div class="wrap">
-    <strong>ElAmigosHUB</strong>
+  <div class="wrap top">
+    <div class="brand"><a href="/index.html">ElAmigosHUB</a></div>
+    <nav class="nav">
+      <a class="pill" href="/index.html">Inicio</a>
+      <a class="pill" href="/juegos.html">Juegos</a>
+      <a class="pill" href="/premium.html" rel="nofollow noopener" target="_blank">Premium</a>
+    </nav>
   </div>
 </header>
 
+<section class="hero">
+  <h1>Juegos, fichas y descargas</h1>
+  <p>Fichas claras, portadas y enlaces. Descarga normal con pasos y premium para acceso rápido.</p>
+
+  <!-- Banner 728x90 (click -> smartlink) -->
+  <div class="banner">
+    <a
+      href="https://www.effectivegatecpm.com/vrz4ii26?key=a8db24c7cfd144939d6c3b694e6f4a98"
+      rel="nofollow noopener"
+      target="_blank"
+    >
+      <img alt="Publicidad" src="https://landings-cdn.adsterratech.com/referralBanners/png/728%20x%2090%20px.png" />
+    </a>
+  </div>
+</section>
+
 <main>
-  <section class="hero">
-    <h1>Juegos, fichas y descargas</h1>
-    <p>
-      Descubre juegos organizados con fichas claras, portadas oficiales
-      y enlaces de descarga optimizados.
-    </p>
+  <div class="controls">
+    <input id="q" class="input" placeholder="Buscar juegos…" />
+  </div>
 
-    <!-- ========================= -->
-    <!-- BANNER 728x90 (CLICK -> SMARTLINK) -->
-    <!-- ========================= -->
-    <div class="banner">
-      <a
-        href="https://www.effectivegatecpm.com/vrz4ii26?key=a8db24c7cfd144939d6c3b694e6f4a98"
-        rel="nofollow noopener"
-        target="_blank"
-      >
-        <img
-          alt="Publicidad"
-          src="https://landings-cdn.adsterratech.com/referralBanners/png/728%20x%2090%20px.png"
-        />
-      </a>
-    </div>
-
-    <div class="btns">
-      <a href="/juegos.html" class="btn">Ver juegos</a>
-
-      <!-- ========================= -->
-      <!-- BOTÓN PREMIUM -> SMARTLINK -->
-      <!-- ========================= -->
-      <a
-        href="https://www.effectivegatecpm.com/vrz4ii26?key=a8db24c7cfd144939d6c3b694e6f4a98"
-        class="btn alt"
-        rel="nofollow noopener"
-        target="_blank"
-      >
-        Descarga premium
-      </a>
-    </div>
-  </section>
+  <!-- AQUÍ se renderizan los juegos -->
+  <section id="grid" class="grid"></section>
 </main>
 
-<footer>
-  © 2026 ElAmigosHUB — Todos los derechos reservados
-</footer>
+<footer>© 2026 ElAmigosHUB</footer>
 
-<!-- ========================= -->
-<!-- Adsterra POPUNDER -->
-<!-- ========================= -->
+<!-- Adsterra: Popunder + Social Bar -->
 <script src="https://pl28424505.effectivegatecpm.com/3a/ae/93/3aae93d0b1b617ac83e45f1eb9745735.js"></script>
-
-<!-- ========================= -->
-<!-- Adsterra SOCIAL BAR -->
-<!-- ========================= -->
 <script src="https://pl28425159.effectivegatecpm.com/57/5c/a5/575ca5ca6fa90ae43377ac49a45da19f.js"></script>
+
+<script>
+  // Render de juegos desde /data/games.json (estructura de ayer)
+  const SMARTLINK = "https://www.effectivegatecpm.com/vrz4ii26?key=a8db24c7cfd144939d6c3b694e6f4a98";
+
+  function esc(s){
+    return (s||"").toString()
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+  function norm(s){ return (s||"").toString().toLowerCase().trim(); }
+
+  async function loadGames(){
+    const r = await fetch("/data/games.json", { cache: "no-store" });
+    if(!r.ok) throw new Error("No se pudo cargar /data/games.json");
+    const data = await r.json();
+
+    // Soporta que venga como array directo o como {games:[...]}
+    return Array.isArray(data) ? data : (data.games || []);
+  }
+
+  function cardHTML(g){
+    const title = esc(g.title || g.name || "");
+    const cover = esc(g.cover || g.image || "");
+    const category = esc(g.category || "");
+    const size = esc(g.size || "");
+    const languages = esc(g.languages || "");
+    const slug = encodeURIComponent(g.slug || "");
+    const desc = esc(g.description || "");
+
+    // Descarga normal: pasa por download.html y de ahí a 1fichier (o lo que pongas en download_free)
+    const freeHref = g.download_free ? `/download.html?slug=${slug}` : "#";
+
+    // Premium: si tienes enlace premium propio, úsalo; si no, smartlink
+    const premiumHref = g.download_premium && g.download_premium !== "#"
+      ? g.download_premium
+      : SMARTLINK;
+
+    return `
+      <article class="card">
+        <a href="${freeHref}">
+          <img class="cover" src="${cover}" alt="${title}">
+        </a>
+        <div class="cardb">
+          <div class="title">${title}</div>
+          <div class="meta">
+            <span>${category}</span><span>•</span>
+            <span>${size}</span><span>•</span>
+            <span>${languages}</span>
+          </div>
+          <div class="btnrow">
+            <a class="btn" href="${freeHref}">Descarga normal</a>
+            <a class="btn alt" href="${premiumHref}" target="_blank" rel="nofollow noopener">Premium</a>
+          </div>
+          ${desc ? `<div class="meta" style="margin-top:10px;">${desc}</div>` : ""}
+        </div>
+      </article>
+    `;
+  }
+
+  function render(games){
+    const grid = document.getElementById("grid");
+    const q = norm(document.getElementById("q").value);
+    const filtered = games.filter(g => {
+      const hay = norm(`${g.title||""} ${g.category||""} ${g.languages||""} ${g.description||""}`);
+      return hay.includes(q);
+    });
+    grid.innerHTML = filtered.map(cardHTML).join("");
+  }
+
+  window.addEventListener("DOMContentLoaded", async () => {
+    const games = await loadGames();
+    const q = document.getElementById("q");
+    q.addEventListener("input", () => render(games));
+    render(games);
+  });
+</script>
 
 </body>
 </html>
