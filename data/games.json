@@ -1,27 +1,48 @@
 {
   "games": [
     {
-      "download_premium": "https://example.com/premium",
-      "size": "12 GB",
-      "download_free": "https://example.com/free",
-      "slug": "juego-ejemplo",
-      "youtube_id": "",
-      "cover": "https://i126.fastpic.org/big/2025/1021/2b/ff11069ead63da5013c156f0166c702b.jpg",
-      "title": "Juego Ejemplo",
-      "languages": "ES / EN",
-      "description": "Descripción corta del juego.",
-      "category": "Action"
+      "slug": "frozenheim",
+      "title": "Frozenheim",
+      "cover": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1134100/header.jpg?t=1763928485",
+      "category": "Strategy",
+      "size": "3GB",
+      "languages": "ES/EN",
+      "download_free": "#",
+      "download_premium": "#",
+      "description": "Lead your Viking clan onto unknown shores and carve out a future for your people in the fjords of Frozenheim. Gather resources, expand, and watch your settlement grow to a bustling town that will withstand the harshness of winter and wrath of other clans."
     },
     {
-      "download_premium": "https://www.youtube.com/watch?v=IIeEGBWj4Vg",
-      "size": "27GB",
-      "download_free": "ENLACE WEB",
-      "slug": "Pro Cycling Manager 2025",
-      "cover": "https://i126.fastpic.org/big/2025/1123/9b/79f7ff26e078a593d22b7131103fe79b.jpg",
-      "title": "Pro Cycling Manager 2025",
-      "languages": "ES",
-      "description": "Download Pro Cycling Manager 25 for PC is now easier on this page, where you have the official version of Elamigos and available servers like Mega, Googledrive, MediaFire and Torrent, download it now and get the game updated to the latest version.\nPro Cycling Manager 25 enters in a new era! With a switch to Unreal Engine 5, the game now benefits from a much more realistic representation of cycling and even higher graphics quality, for an even more immersive experience. Rediscover the roads of the Tour de France, the Vuelta, the Classics and the Monuments in a whole new light.",
-      "category": "Carreras"
+      "slug": "floodland",
+      "title": "Floodland",
+      "cover": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1336180/header.jpg?t=1726480916",
+      "category": "Strategy",
+      "size": "2GB",
+      "languages": "ES/EN",
+      "download_free": "#",
+      "download_premium": "#",
+      "description": "A society survival game set in a world destroyed by climate change. Explore, scavenge and build a city to unite the clans. Conflicting cultures and limited resources mean you need to make tough choices; have you got what it takes to lead your people into a new era of humanity?"
+    },
+    {
+      "slug": "settlement-survival",
+      "title": "Settlement Survival",
+      "cover": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1509510/header.jpg?t=1763037488",
+      "category": "Strategy",
+      "size": "500MB",
+      "languages": "ES/EN",
+      "download_free": "#",
+      "download_premium": "#",
+      "description": "In this city-building game, you will lead a group of survivors in their search for a new home. Manipulate the landscape, manage limited supplies, plant crops, hunt wildlife, gather resources, and develop trade routes to build a bustling and unique town."
+    },
+    {
+      "slug": "theoperator",
+      "title": "The Operator",
+      "cover": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1771980/header.jpg?t=1755332606",
+      "category": "Strategy",
+      "size": "600MB",
+      "languages": "ES/EN",
+      "download_free": "#",
+      "download_premium": "#",
+      "description": "Welcome to the FDI. As our newest Operator, your role is to use your detective skills to assist our field agents and investigate mysterious crimes. Use cutting-edge FDI software to dig for clues, solve puzzles, and uncover the truth."
     }
   ]
 }
