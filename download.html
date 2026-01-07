@@ -19,19 +19,38 @@
     .b{padding:14px;}
     .muted{color:var(--muted);line-height:1.6}
     .row{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;}
+
     .btn{
       display:inline-flex;align-items:center;justify-content:center;
       padding:12px 14px;border-radius:12px;border:1px solid var(--line);
       background:var(--btn);font-weight:800; text-decoration:none;
+      min-width: 220px;
     }
-    .btn.alt{background:transparent;}
+    .btn.alt{background:transparent; min-width:auto;}
     .btn.disabled{
       background:rgba(255,255,255,.06);
       color:var(--muted);
       cursor:not-allowed;
       pointer-events:none;
     }
+
     .notice{margin-top:12px;color:var(--muted);font-size:13px}
+
+    .countdown{
+      margin-top:12px;
+      padding:10px 12px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);
+      border-radius:12px;
+      color:var(--muted);
+      font-size:13px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .countdown strong{color:var(--text)}
   </style>
 </head>
 <body>
@@ -44,13 +63,14 @@
   <div id="box" class="card"></div>
 </main>
 
-<!-- Adsterra (para monetizar esta intermedia) -->
+<!-- Adsterra (monetiza esta intermedia) -->
 <script src="https://pl28424505.effectivegatecpm.com/3a/ae/93/3aae93d0b1b617ac83e45f1eb9745735.js"></script>
 <script src="https://pl28425159.effectivegatecpm.com/57/5c/a5/575ca5ca6fa90ae43377ac49a45da19f.js"></script>
 
 <script>
   const SMARTLINK = "https://www.effectivegatecpm.com/vrz4ii26?key=a8db24c7cfd144939d6c3b694e6f4a98";
   const slug = new URLSearchParams(location.search).get("slug") || "";
+  const DELAY_SECONDS = 5;
 
   function esc(s){
     return (s||"").toString()
@@ -60,19 +80,40 @@
       .replaceAll('"',"&quot;")
       .replaceAll("'","&#039;");
   }
-
   function isRealLink(url){
     if(!url) return false;
-    const u = url.trim();
-    return u !== "#" && u !== "";
+    const u = String(url).trim();
+    return u !== "" && u !== "#";
   }
 
   async function loadGames(){
-    // ✅ RELATIVA
     const r = await fetch("data/games.json", { cache:"no-store" });
     if(!r.ok) throw new Error("No se pudo cargar data/games.json (HTTP " + r.status + ")");
     const data = await r.json();
     return Array.isArray(data) ? data : (data.games || []);
+  }
+
+  function startCountdown(btnEl, counterEl, targetUrl){
+    let t = DELAY_SECONDS;
+    btnEl.classList.add("disabled");
+    btnEl.setAttribute("aria-disabled", "true");
+    btnEl.removeAttribute("href");
+
+    counterEl.innerHTML = `Esperando… <strong>${t}s</strong>`;
+
+    const timer = setInterval(() => {
+      t -= 1;
+      if (t <= 0) {
+        clearInterval(timer);
+        counterEl.innerHTML = `Listo ✅ <strong>puedes continuar</strong>`;
+        btnEl.classList.remove("disabled");
+        btnEl.removeAttribute("aria-disabled");
+        btnEl.setAttribute("href", targetUrl);
+        btnEl.textContent = "Continuar a 1fichier";
+      } else {
+        counterEl.innerHTML = `Esperando… <strong>${t}s</strong>`;
+      }
+    }, 1000);
   }
 
   window.addEventListener("DOMContentLoaded", async () => {
@@ -107,13 +148,20 @@
 
           <div class="notice">
             Estás en la página intermedia de descarga.
-            ${freeAvailable ? "Pulsa continuar para ir al servidor." : "Este juego aún no tiene enlace de descarga normal."}
+            ${freeAvailable ? "Espera unos segundos y se activará el botón." : "Este juego aún no tiene enlace de descarga normal."}
           </div>
+
+          ${freeAvailable ? `
+            <div class="countdown">
+              <span>Activando el enlace…</span>
+              <span id="counter"><strong>${DELAY_SECONDS}s</strong></span>
+            </div>
+          ` : ""}
 
           <div class="row">
             ${
               freeAvailable
-                ? `<a class="btn" href="${free}" target="_blank" rel="nofollow noopener">Continuar a 1fichier</a>`
+                ? `<a id="freeBtn" class="btn" href="${free}" target="_blank" rel="nofollow noopener">Continuar a 1fichier</a>`
                 : `<span class="btn disabled">Descarga normal no disponible</span>`
             }
             <a class="btn alt" href="${premium}" target="_blank" rel="nofollow noopener">Premium</a>
@@ -121,6 +169,14 @@
           </div>
         </div>
       `;
+
+      // Inicia contador solo si hay link real
+      if (freeAvailable){
+        const freeBtn = document.getElementById("freeBtn");
+        const counter = document.getElementById("counter");
+        startCountdown(freeBtn, counter, free);
+      }
+
     }catch(e){
       console.error(e);
       box.innerHTML = `<div class="b">
