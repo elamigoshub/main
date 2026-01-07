@@ -32,12 +32,14 @@
     .top{display:flex; justify-content:space-between; align-items:center; gap:12px;}
     .brand{font-weight:800}
     .nav{display:flex; gap:10px; flex-wrap:wrap}
+
     .pill{
       border:1px solid var(--line);
       padding:10px 12px;
       border-radius:999px;
       color:var(--muted);
       transition: background .12s ease, border-color .12s ease, color .12s ease;
+      background: transparent;
     }
     .pill:hover{
       background: rgba(255,255,255,.06);
@@ -61,6 +63,7 @@
 
     main{max-width:var(--max); margin:auto; padding:18px 16px 42px;}
     .controls{display:flex; gap:12px; flex-wrap:wrap; margin:10px 0 16px;}
+
     .input{
       flex:1; min-width:220px;
       border:1px solid var(--line);
@@ -70,6 +73,17 @@
       border-radius:12px;
       outline:none;
     }
+
+    .cat{
+      cursor:pointer;
+      background: rgba(255,255,255,.03);
+    }
+    .cat.active{
+      background: rgba(47,107,255,.18);
+      border-color: rgba(47,107,255,.45);
+      color: var(--text);
+    }
+
     .grid{
       display:grid;
       grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -151,6 +165,16 @@
     <input id="q" class="input" placeholder="Buscar juegos…" />
   </div>
 
+  <!-- ✅ Categorías predefinidas (como ayer) -->
+  <div class="controls" id="categories">
+    <button class="pill cat active" data-cat="all" type="button">Todas</button>
+    <button class="pill cat" data-cat="strategy" type="button">Strategy</button>
+    <button class="pill cat" data-cat="rpg" type="button">RPG</button>
+    <button class="pill cat" data-cat="action" type="button">Action</button>
+    <button class="pill cat" data-cat="adventure" type="button">Adventure</button>
+    <button class="pill cat" data-cat="simulation" type="button">Simulation</button>
+  </div>
+
   <section id="grid" class="grid"></section>
   <div id="err" style="margin-top:14px;"></div>
 </main>
@@ -163,6 +187,7 @@
 
 <script>
   const SMARTLINK = "https://www.effectivegatecpm.com/vrz4ii26?key=a8db24c7cfd144939d6c3b694e6f4a98";
+  let currentCategory = "all";
 
   function esc(s){
     return (s||"").toString()
@@ -222,10 +247,18 @@
   function render(games){
     const grid = document.getElementById("grid");
     const q = norm(document.getElementById("q").value);
+
     const filtered = games.filter(g => {
       const hay = norm(`${g.title||""} ${g.category||""} ${g.languages||""} ${g.description||""}`);
-      return hay.includes(q);
+      const textMatch = hay.includes(q);
+
+      const catMatch =
+        currentCategory === "all" ||
+        norm(g.category || "") === currentCategory;
+
+      return textMatch && catMatch;
     });
+
     grid.innerHTML = filtered.map(cardHTML).join("");
   }
 
@@ -233,8 +266,20 @@
     const err = document.getElementById("err");
     try{
       const games = await loadGames();
+
       const q = document.getElementById("q");
       q.addEventListener("input", () => render(games));
+
+      // ✅ categorías
+      document.querySelectorAll(".cat").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".cat").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          currentCategory = btn.dataset.cat;
+          render(games);
+        });
+      });
+
       render(games);
     }catch(e){
       console.error(e);
