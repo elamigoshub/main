@@ -19,15 +19,25 @@
     .b{padding:14px;}
     .muted{color:var(--muted);line-height:1.6}
     .row{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;}
-    .btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--btn);font-weight:800;}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:12px 14px;border-radius:12px;border:1px solid var(--line);
+      background:var(--btn);font-weight:800; text-decoration:none;
+    }
     .btn.alt{background:transparent;}
+    .btn.disabled{
+      background:rgba(255,255,255,.06);
+      color:var(--muted);
+      cursor:not-allowed;
+      pointer-events:none;
+    }
     .notice{margin-top:12px;color:var(--muted);font-size:13px}
   </style>
 </head>
 <body>
 
 <header>
-  <strong><a href="/index.html" style="color:inherit;text-decoration:none">ElAmigosHUB</a></strong>
+  <strong><a href="./index.html" style="color:inherit;text-decoration:none">ElAmigosHUB</a></strong>
 </header>
 
 <main>
@@ -51,45 +61,73 @@
       .replaceAll("'","&#039;");
   }
 
+  function isRealLink(url){
+    if(!url) return false;
+    const u = url.trim();
+    return u !== "#" && u !== "";
+  }
+
   async function loadGames(){
-    const r = await fetch("/data/games.json", { cache:"no-store" });
+    // ✅ RELATIVA
+    const r = await fetch("data/games.json", { cache:"no-store" });
+    if(!r.ok) throw new Error("No se pudo cargar data/games.json (HTTP " + r.status + ")");
     const data = await r.json();
     return Array.isArray(data) ? data : (data.games || []);
   }
 
   window.addEventListener("DOMContentLoaded", async () => {
-    const games = await loadGames();
-    const g = games.find(x => (x.slug||"") === slug);
-
     const box = document.getElementById("box");
-    if(!g){
-      box.innerHTML = `<div class="b"><p class="muted">Juego no encontrado.</p><div class="row"><a class="btn alt" href="/index.html">Volver</a></div></div>`;
-      return;
+
+    try{
+      const games = await loadGames();
+      const g = games.find(x => (x.slug||"") === slug);
+
+      if(!g){
+        box.innerHTML = `<div class="b">
+          <p class="muted">Juego no encontrado.</p>
+          <div class="row"><a class="btn alt" href="./index.html">Volver</a></div>
+        </div>`;
+        return;
+      }
+
+      const title = esc(g.title||"");
+      const cover = esc(g.cover||"");
+      const desc = esc(g.description||"");
+
+      const free = (g.download_free || "").trim();
+      const premium = (g.download_premium && g.download_premium !== "#") ? g.download_premium : SMARTLINK;
+
+      const freeAvailable = isRealLink(free);
+
+      box.innerHTML = `
+        <img class="cover" src="${cover}" alt="${title}">
+        <div class="b">
+          <h2 style="margin:0 0 8px;">${title}</h2>
+          <p class="muted" style="margin:0;">${desc}</p>
+
+          <div class="notice">
+            Estás en la página intermedia de descarga.
+            ${freeAvailable ? "Pulsa continuar para ir al servidor." : "Este juego aún no tiene enlace de descarga normal."}
+          </div>
+
+          <div class="row">
+            ${
+              freeAvailable
+                ? `<a class="btn" href="${free}" target="_blank" rel="nofollow noopener">Continuar a 1fichier</a>`
+                : `<span class="btn disabled">Descarga normal no disponible</span>`
+            }
+            <a class="btn alt" href="${premium}" target="_blank" rel="nofollow noopener">Premium</a>
+            <a class="btn alt" href="./index.html">Volver</a>
+          </div>
+        </div>
+      `;
+    }catch(e){
+      console.error(e);
+      box.innerHTML = `<div class="b">
+        <p class="muted"><strong style="color:#eaf0ff">Error cargando datos.</strong><br>${esc(e.message)}</p>
+        <div class="row"><a class="btn alt" href="./index.html">Volver</a></div>
+      </div>`;
     }
-
-    const title = esc(g.title||"");
-    const cover = esc(g.cover||"");
-    const desc = esc(g.description||"");
-    const free = g.download_free || "#";
-    const premium = (g.download_premium && g.download_premium !== "#") ? g.download_premium : SMARTLINK;
-
-    box.innerHTML = `
-      <img class="cover" src="${cover}" alt="${title}">
-      <div class="b">
-        <h2 style="margin:0 0 8px;">${title}</h2>
-        <p class="muted" style="margin:0;">${desc}</p>
-
-        <div class="notice">
-          Estás en la página intermedia de descarga. Pulsa continuar para ir al servidor.
-        </div>
-
-        <div class="row">
-          <a class="btn" href="${free}" target="_blank" rel="nofollow noopener">Continuar a 1fichier</a>
-          <a class="btn alt" href="${premium}" target="_blank" rel="nofollow noopener">Premium</a>
-          <a class="btn alt" href="/index.html">Volver</a>
-        </div>
-      </div>
-    `;
   });
 </script>
 
