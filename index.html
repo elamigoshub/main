@@ -138,6 +138,7 @@
 
 <footer>© 2026 ElAmigosHUB</footer>
 
+<!-- Adsterra: Popunder + Social Bar -->
 <script src="https://pl28424505.effectivegatecpm.com/3a/ae/93/3aae93d0b1b617ac83e45f1eb9745735.js"></script>
 <script src="https://pl28425159.effectivegatecpm.com/57/5c/a5/575ca5ca6fa90ae43377ac49a45da19f.js"></script>
 
@@ -155,7 +156,7 @@
   function norm(s){ return (s||"").toString().toLowerCase().trim(); }
 
   async function loadGames(){
-    // ✅ RELATIVA (no rompe si estás en subcarpeta)
+    // ✅ RELATIVA: no depende de estar en / raíz
     const r = await fetch("data/games.json", { cache: "no-store" });
     if(!r.ok) throw new Error("No se pudo cargar data/games.json (HTTP " + r.status + ")");
     const data = await r.json();
@@ -163,20 +164,24 @@
   }
 
   function cardHTML(g){
-    const title = esc(g.title || g.name || "");
-    const cover = esc(g.cover || g.image || "");
+    const title = esc(g.title || "");
+    const cover = esc(g.cover || "");
     const category = esc(g.category || "");
     const size = esc(g.size || "");
     const languages = esc(g.languages || "");
     const slug = encodeURIComponent(g.slug || "");
     const desc = esc(g.description || "");
 
-    const freeHref = g.download_free ? `./download.html?slug=${slug}` : `./download.html?slug=${slug}`;
-    const premiumHref = (g.download_premium && g.download_premium !== "#") ? g.download_premium : SMARTLINK;
+    // ✅ SIEMPRE va a la intermedia (aunque aún no tengas el 1fichier)
+    const normalHref = `./download.html?slug=${slug}`;
+
+    const premiumHref = (g.download_premium && g.download_premium !== "#")
+      ? g.download_premium
+      : SMARTLINK;
 
     return `
       <article class="card">
-        <a href="${freeHref}">
+        <a href="${normalHref}">
           <img class="cover" src="${cover}" alt="${title}">
         </a>
         <div class="cardb">
@@ -187,7 +192,7 @@
             <span>${languages}</span>
           </div>
           <div class="btnrow">
-            <a class="btn" href="${freeHref}">Descarga normal</a>
+            <a class="btn" href="${normalHref}">Descarga normal</a>
             <a class="btn alt" href="${premiumHref}" target="_blank" rel="nofollow noopener">Premium</a>
           </div>
           ${desc ? `<div class="meta" style="margin-top:10px;">${desc}</div>` : ""}
@@ -218,7 +223,7 @@
       err.innerHTML = `<div class="errorbox">
         <strong style="color:var(--text)">No se han podido cargar los juegos.</strong><br>
         <span>${esc(e.message)}</span><br><br>
-        <span>Comprueba que existe <code>data/games.json</code> y que estás abriendo la web desde un servidor (no desde <code>file://</code>).</span>
+        <span>Comprueba que existe <code>data/games.json</code> y que estás abriendo desde un servidor (no <code>file://</code>).</span>
       </div>`;
     }
   });
