@@ -37,6 +37,19 @@
       padding:10px 12px;
       border-radius:999px;
       color:var(--muted);
+      transition: background .12s ease, border-color .12s ease, color .12s ease;
+    }
+    .pill:hover{
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+    }
+    .pill-premium{
+      background: rgba(47,107,255,.15);
+      color: var(--text);
+      border-color: rgba(47,107,255,.45);
+    }
+    .pill-premium:hover{
+      background: rgba(47,107,255,.22);
     }
 
     .hero{padding:44px 16px 18px; text-align:center;}
@@ -104,10 +117,15 @@
 <header>
   <div class="wrap top">
     <div class="brand"><a href="./index.html">ElAmigosHUB</a></div>
+
+    <!-- ✅ NAV sin 404 -->
     <nav class="nav">
       <a class="pill" href="./index.html">Inicio</a>
-      <a class="pill" href="./games.html">Juegos</a>
-      <a class="pill" href="./premium.html" rel="nofollow noopener" target="_blank">Premium</a>
+      <a class="pill" href="#juegos">Juegos</a>
+      <a class="pill pill-premium"
+         href="https://www.effectivegatecpm.com/vrz4ii26?key=a8db24c7cfd144939d6c3b694e6f4a98"
+         rel="nofollow noopener"
+         target="_blank">Premium</a>
     </nav>
   </div>
 </header>
@@ -127,7 +145,8 @@
   </div>
 </section>
 
-<main>
+<!-- ✅ id para que el botón "Juegos" haga scroll -->
+<main id="juegos">
   <div class="controls">
     <input id="q" class="input" placeholder="Buscar juegos…" />
   </div>
@@ -156,7 +175,6 @@
   function norm(s){ return (s||"").toString().toLowerCase().trim(); }
 
   async function loadGames(){
-    // ✅ RELATIVA: no depende de estar en / raíz
     const r = await fetch("data/games.json", { cache: "no-store" });
     if(!r.ok) throw new Error("No se pudo cargar data/games.json (HTTP " + r.status + ")");
     const data = await r.json();
@@ -172,7 +190,7 @@
     const slug = encodeURIComponent(g.slug || "");
     const desc = esc(g.description || "");
 
-    // ✅ SIEMPRE va a la intermedia (aunque aún no tengas el 1fichier)
+    // ✅ SIEMPRE intermedia
     const normalHref = `./download.html?slug=${slug}`;
 
     const premiumHref = (g.download_premium && g.download_premium !== "#")
@@ -222,8 +240,7 @@
       console.error(e);
       err.innerHTML = `<div class="errorbox">
         <strong style="color:var(--text)">No se han podido cargar los juegos.</strong><br>
-        <span>${esc(e.message)}</span><br><br>
-        <span>Comprueba que existe <code>data/games.json</code> y que estás abriendo desde un servidor (no <code>file://</code>).</span>
+        <span>${esc(e.message)}</span>
       </div>`;
     }
   });
